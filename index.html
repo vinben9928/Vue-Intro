@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Vue Intro</title>
+        <link rel="stylesheet" type="text/css" href="main.css"/>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+        <script type="text/javascript" src="main.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <h1>{{ title }}</h1>
+            <ul>
+                <li v-for="(guitar,index) in guitars" :key="index" :id="guitar.id">
+                    {{ guitar.brand }} ({{ guitar.type }}) <!--<a :href="'delete.php?item=' + index">[x]</a>-->
+                    <button :id="index" @click="deleteThis($event)">x</button>
+                </li>
+            </ul>
+        </div>
+        <input id="guitarBrand" type="text" placeholder="Brand"/>
+        <input id="guitarType" type="text" placeholder="Type"/>
+        <button onclick="addGuitar()">Add</button>
+        <script>
+            const testId = "_123456789";
+            const guitars = [
+                {id: "1234", brand: "Taylor", type: "Acoustic"},
+                {id: "1235", brand: "Fender", type: "Electric"},
+                {id: "1236", brand: "Gibson", type: "Electric"},
+                {id: "1237", brand: "Tanglewood", type: "Acoustic"}
+            ];
+
+            var myVue = new Vue({
+                el: "#app",
+                data: {
+                    title: "My Guitar Collection",
+                    guitars: guitars
+                },
+                methods: {
+                    changeTitle: function() {
+                        this.title = "Vincents Guitar Collection";
+                    }
+                }
+            });
+
+            function deleteThis(event) {
+                if(confirm("Are you sure you want to delete the guitar?")) {
+                    guitars.splice(event.currentTarget.id, 1);
+                }
+            }
+
+            var ids = 0;
+
+            function addGuitar() {
+                var guitarBrand = document.getElementById("guitarBrand");
+                var guitarType = document.getElementById("guitarType");
+                guitars.push({id: ids, brand: guitarBrand.value, type: guitarType.value});
+                ids++;
+
+                guitarBrand.value = "";
+                guitarType.value = "";
+            }
+        </script>
+    </body>
+</html>
